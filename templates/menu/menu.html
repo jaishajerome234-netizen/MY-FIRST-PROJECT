@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Menu – FoodieRush{% endblock %}
+{% block content %}
+<div class="section">
+  <h2 class="section-title">🍽️ Our Menu</h2>
+  <p class="section-sub">Fresh dishes made to order</p>
+
+  <div class="cat-grid">
+    <a href="{% url 'menu_list' %}" class="cat-btn {% if not selected_cat %}active{% endif %}">All</a>
+    {% for cat in categories %}
+    <a href="{% url 'menu_list' %}?category={{ cat.id }}" class="cat-btn {% if selected_cat == cat.id %}active{% endif %}">{{ cat.icon }} {{ cat.name }}</a>
+    {% endfor %}
+  </div>
+
+  {% if items %}
+  <div class="card-grid">
+    {% for item in items %}
+    <div class="card">
+      {% if item.image %}
+        <img src="{{ item.image.url }}" alt="{{ item.name }}" class="card-img">
+      {% else %}
+        <div class="card-img-placeholder">{{ item.category.icon }}</div>
+      {% endif %}
+      <div class="card-body">
+        <div style="display:flex;gap:.4rem;margin-bottom:.5rem;">
+          {% if item.is_vegetarian %}<span class="badge badge-veg">🌿 Veg</span>{% endif %}
+          {% if item.is_popular %}<span class="badge badge-pop">🔥 Popular</span>{% endif %}
+        </div>
+        <div class="card-title"><a href="{% url 'item_detail' item.pk %}">{{ item.name }}</a></div>
+        <div class="card-desc">{{ item.description }}</div>
+        <div class="card-footer">
+          <span class="price">₹{{ item.price }}</span>
+          <button class="btn btn-primary btn-sm add-to-cart-btn" data-url="{% url 'add_to_cart' item.pk %}">🛒 Add</button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state"><div class="icon">🍽️</div><p>No items found in this category.</p></div>
+  {% endif %}
+</div>
+{% csrf_token %}
+{% endblock %}

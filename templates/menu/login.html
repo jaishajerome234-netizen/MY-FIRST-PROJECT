@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Login – FoodieRush{% endblock %}
+{% block content %}
+<div class="form-card">
+  <h2>👋 Welcome back</h2>
+  <form method="post">{% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+      <label>{{ field.label }}</label>
+      {{ field }}
+      {% if field.errors %}<div class="form-error">{{ field.errors.0 }}</div>{% endif %}
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">Login</button>
+  </form>
+  <p style="text-align:center;margin-top:1rem;color:#6B7280;">Don't have an account? <a href="{% url 'register' %}" style="color:var(--orange);font-weight:700;">Register</a></p>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Order #{{ order.id }} – FoodieRush{% endblock %}
+{% block content %}
+<div class="section" style="max-width:720px;">
+  <h2 class="section-title">Order #{{ order.id }}</h2>
+  <p style="color:#6B7280;margin-bottom:1.5rem;">Placed on {{ order.created_at|date:"d M Y, H:i" }}</p>
+  <div style="background:#fff;border-radius:14px;padding:1.5rem;box-shadow:var(--shadow);margin-bottom:1.5rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <h3>Status</h3>
+      <span class="status-badge status-{{ order.status }}">{{ order.get_status_display }}</span>
+    </div>
+    <div><strong>Delivery Address:</strong> {{ order.delivery_address }}</div>
+    <div><strong>Phone:</strong> {{ order.phone }}</div>
+    {% if order.notes %}<div><strong>Notes:</strong> {{ order.notes }}</div>{% endif %}
+  </div>
+  <div style="background:#fff;border-radius:14px;padding:1.5rem;box-shadow:var(--shadow);">
+    <h3 style="margin-bottom:1rem;">Items</h3>
+    {% for oi in order.items.all %}
+    <div style="display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid #F3F4F6;">
+      <span>{{ oi.menu_item.name }} × {{ oi.quantity }}</span>
+      <span>₹{{ oi.subtotal }}</span>
+    </div>
+    {% endfor %}
+    <div style="display:flex;justify-content:space-between;margin-top:1rem;font-size:1.1rem;font-weight:800;">
+      <span>Total</span><span style="color:var(--orange);">₹{{ order.total_price }}</span>
+    </div>
+  </div>
+  <a href="{% url 'my_orders' %}" class="btn btn-dark mt-2">← All Orders</a>
+</div>
+{% endblock %}

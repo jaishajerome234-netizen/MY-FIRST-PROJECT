@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}{{ item.name }} – FoodieRush{% endblock %}
+{% block content %}
+<div class="section" style="max-width:760px;">
+  {% if item.image %}
+    <img src="{{ item.image.url }}" alt="{{ item.name }}" style="border-radius:16px;width:100%;max-height:380px;object-fit:cover;margin-bottom:2rem;">
+  {% else %}
+    <div style="background:#F3F4F6;border-radius:16px;height:280px;display:flex;align-items:center;justify-content:center;font-size:6rem;margin-bottom:2rem;">{{ item.category.icon }}</div>
+  {% endif %}
+  <div style="display:flex;gap:.5rem;margin-bottom:.8rem;">
+    {% if item.is_vegetarian %}<span class="badge badge-veg">🌿 Vegetarian</span>{% endif %}
+    {% if item.is_popular %}<span class="badge badge-pop">🔥 Popular</span>{% endif %}
+  </div>
+  <h1 style="font-size:2rem;font-weight:900;margin-bottom:.5rem;">{{ item.name }}</h1>
+  <p style="color:#6B7280;margin-bottom:1.5rem;">{{ item.description }}</p>
+  <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+    <span class="price" style="font-size:1.8rem;">₹{{ item.price }}</span>
+    <button class="btn btn-primary add-to-cart-btn" data-url="{% url 'add_to_cart' item.pk %}">🛒 Add to Cart</button>
+    <a href="{% url 'menu_list' %}" class="btn btn-dark">← Back to Menu</a>
+  </div>
+</div>
+{% csrf_token %}
+{% endblock %}
